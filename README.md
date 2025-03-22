@@ -2,6 +2,11 @@
 
 A new Flutter project.
 
+## Mobile Application Project
+### Member
+- 6687052 Sukollapat Pisuchpen sec2
+- 6687015 Thitaree Kongkaew sec2
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
