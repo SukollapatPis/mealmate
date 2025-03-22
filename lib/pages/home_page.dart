@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mealmate/api/recipe_api.dart';
 import 'package:mealmate/models/recipe_model.dart';
+import 'package:mealmate/pages/search_input_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,12 +15,37 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    recipeApi.searchRecipes().then((value) {
+    recipeApi.searchRecipes("", "", "").then((value) {
       setState(() {
         recipes = value.results;
       });
     });
     super.initState();
+  }
+
+  void _openSearchPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchInputPage(),
+      ),
+    );
+
+    if (result != null) {
+      final searchText = result['searchText'];
+      final cuisine = result['cuisine'];
+      final dishType = result['dishType'];
+
+      print("Search Text: $searchText");
+      print("Cuisine: $cuisine");
+      print("Dish Type: $dishType");
+
+      recipeApi.searchRecipes(searchText, cuisine, dishType).then((value) {
+        setState(() {
+          recipes = value.results;
+        });
+      });
+    }
   }
 
   @override
@@ -36,20 +62,24 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search of recipes name',
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.search),
+            GestureDetector(
+              onTap: _openSearchPage,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      enabled: false, // ปิดการใช้งาน TextField
+                      decoration: InputDecoration(
+                        hintText: 'Search of recipes name',
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.search),
+                      ),
                     ),
                   ),
                 ),

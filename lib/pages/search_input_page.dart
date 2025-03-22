@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
+class SearchInputPage extends StatefulWidget {
   @override
-  _SearchPageState createState() => _SearchPageState();
+  _SearchInputPageState createState() => _SearchInputPageState();
 }
-//
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchInputPageState extends State<SearchInputPage> {
+  String searchText = "";
   String selectedCuisine = "Thai";
   String selectedDishType = "All";
 
   final List<String> cuisines = [
-    "Thai",
-    "Japanese",
-    "Italian",
-    "Indian",
+    "African",
+    "Asian",
+    "American",
+    "British",
+    "Cajun",
+    "Caribbean",
     "Chinese",
-    "French"
+    "Eastern European",
+    "European",
+    "French",
+    "German",
+    "Greek",
+    "Indian",
+    "Irish",
+    "Italian",
+    "Japanese",
+    "Jewish",
+    "Korean",
+    "Latin American",
+    "Mediterranean",
+    "Mexican",
+    "Middle Eastern",
+    "Nordic",
+    "Southern",
+    "Spanish",
+    "Thai",
+    "Vietnamese",
   ];
 
   final List<String> dishTypes = [
@@ -30,6 +51,11 @@ class _SearchPageState extends State<SearchPage> {
     "Breakfast",
     "Soup",
     "Beverage",
+    "Sauce",
+    "Marinade",
+    "Fingerfood",
+    "Snack",
+    "Drink",
   ];
 
   @override
@@ -52,15 +78,21 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             const SizedBox(height: 8),
+            // Search Text Field
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextField(
-                  decoration: InputDecoration(
+                  onChanged: (value) {
+                    setState(() {
+                      searchText = value;
+                    });
+                  },
+                  decoration: const InputDecoration(
                     hintText: 'Search of recipes name',
                     border: InputBorder.none,
                     prefixIcon: Icon(Icons.search),
@@ -140,9 +172,15 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                       onPressed: () {
-                        print("Searching: $selectedCuisine, $selectedDishType");
+                        // ส่งข้อมูลกลับไปยังหน้า HomePage
+                        Navigator.pop(context, {
+                          'searchText': searchText,
+                          'cuisine': selectedCuisine,
+                          'dishType': selectedDishType,
+                        });
                       },
-                      child: const Text('Search'),
+                      child: const Text('Search',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ],
