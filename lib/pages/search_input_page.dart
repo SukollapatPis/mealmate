@@ -4,6 +4,7 @@ class SearchPage extends StatefulWidget {
   @override
   _SearchPageState createState() => _SearchPageState();
 }
+//
 
 class _SearchPageState extends State<SearchPage> {
   String selectedCuisine = "Thai";
