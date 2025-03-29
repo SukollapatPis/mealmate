@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mealmate/api/recipe_api.dart';
 import 'package:mealmate/models/recipe_model.dart';
 import 'package:mealmate/pages/search_input_page.dart';
+import 'package:mealmate/pages/wine_page.dart'; // นำเข้า WinePage
+import 'package:mealmate/pages/restaurant_page.dart'; // นำเข้า RestaurantPage
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final recipeApi = RecipeApi();
+  int _selectedIndex = 0; // เพิ่มตัวแปรเพื่อติดตาม index ที่ถูกเลือก
 
   List<RecipeModel> recipes = [];
 
@@ -45,6 +48,31 @@ class _HomePageState extends State<HomePage> {
           recipes = value.results;
         });
       });
+    }
+  }
+
+  // เพิ่มเมธอดเพื่อจัดการการเปลี่ยนหน้า
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        // อยู่ที่หน้า Home อยู่แล้ว ไม่ต้องทำอะไร
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WinePage()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RestaurantPage()),
+        );
+        break;
     }
   }
 
@@ -150,9 +178,9 @@ class _HomePageState extends State<HomePage> {
             label: 'Restaurant',
           ),
         ],
-        currentIndex: 0,
+        currentIndex: _selectedIndex, // ใช้ _selectedIndex เพื่อติดตามหน้าปัจจุบัน
         selectedItemColor: colorScheme.primary,
-        onTap: (index) {},
+        onTap: _onItemTapped, // เรียกใช้เมธอด _onItemTapped เมื่อผู้ใช้แตะที่ไอคอน
       ),
     );
   }

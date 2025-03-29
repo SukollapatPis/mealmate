@@ -11,6 +11,7 @@ class _SearchInputPageState extends State<SearchInputPage> {
   String selectedDishType = "All";
 
   final List<String> cuisines = [
+    "All",  // เพิ่มตัวเลือก All
     "African",
     "Asian",
     "American",
