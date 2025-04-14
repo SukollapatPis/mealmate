@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mealmate/models/recipe_model.dart';
-import 'package:mealmate/api/recipe_detail_api.dart'; // ต้อง import API
+import 'package:mealmate/api/recipe_detail_api.dart';
+import 'package:mealmate/pages/nutrient_page.dart';
 
 class RecipeDetailPage extends StatefulWidget {
   final int recipeId;
@@ -47,7 +48,7 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ภาพอาหาร + ปุ่ม Favorite
+                // ภาพอาหาร + ปุ่ม Favorite + ปุ่ม
                 Stack(
                   children: [
                     Container(
@@ -69,6 +70,32 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         child: Icon(Icons.favorite_border),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NutrientPage(
+                                recipeId: widget.recipeId,
+                                apiKey: widget.apiKey,
+                                title: recipe.title,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text("Show Nutrient  >"),
                       ),
                     ),
                   ],
