@@ -13,18 +13,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final recipeApi = RecipeApi();
   int _selectedIndex = 0; // เพิ่มตัวแปรเพื่อติดตาม index ที่ถูกเลือก
+  String _titleText = 'Recommend recipes';
 
   List<RecipeModel> recipes = [];
 
   @override
   void initState() {
-    recipeApi.searchRecipes("", "", "").then((value) {
-      setState(() {
-        recipes = value.results;
-      });
+  // โหลดข้อมูลเริ่มต้น
+  recipeApi.searchRecipes("", "", "").then((value) {
+    setState(() {
+      recipes = value.results;
+      _titleText = 'Recommend recipes'; //ค่าเริ่มต้น
     });
-    super.initState();
-  }
+  });
+  super.initState();
+}
 
   void _openSearchPage() async {
     final result = await Navigator.push(
@@ -46,6 +49,7 @@ class _HomePageState extends State<HomePage> {
       recipeApi.searchRecipes(searchText, cuisine, dishType).then((value) {
         setState(() {
           recipes = value.results;
+          _titleText = "Result of search";
         });
       });
     }
@@ -53,14 +57,21 @@ class _HomePageState extends State<HomePage> {
 
   // เพิ่มเมธอดเพื่อจัดการการเปลี่ยนหน้า
   void _onItemTapped(int index) {
+  if (index == 0) {
+    // ถ้ากดที่หน้า Home ซ้ำ ให้รีเซตข้อมูล
+    recipeApi.searchRecipes("", "", "").then((value) {
+      setState(() {
+        _selectedIndex = 0;
+        recipes = value.results;
+        _titleText = 'Recommend recipes'; //รีเซตข้อความ
+      });
+    });
+  } else {
     setState(() {
       _selectedIndex = index;
     });
 
     switch (index) {
-      case 0:
-        // อยู่ที่หน้า Home อยู่แล้ว ไม่ต้องทำอะไร
-        break;
       case 1:
         Navigator.push(
           context,
@@ -75,6 +86,8 @@ class _HomePageState extends State<HomePage> {
         break;
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +127,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Recommend recipes',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                _titleText, // ใช้ตัวแปรแทนข้อความคงที่
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
