@@ -4,6 +4,7 @@ import 'package:mealmate/models/recipe_model.dart';
 import 'package:mealmate/pages/search_input_page.dart';
 import 'package:mealmate/pages/wine_page.dart'; // นำเข้า WinePage
 import 'package:mealmate/pages/restaurant_page.dart'; // นำเข้า RestaurantPage
+import 'package:mealmate/pages/recipe_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -147,28 +148,42 @@ class _HomePageState extends State<HomePage> {
                 ),
                 itemCount: recipes.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                        image: NetworkImage(recipes[index].image),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5), // Darken by 50%
-                          BlendMode.darken,
+                  final recipe = recipes[index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeDetailPage(recipeId: recipe.id,
+                          apiKey: '6de5a090dd2c4b2795f798d66fc5d774',),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: NetworkImage(recipes[index].image),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.5), // Darken by 50%
+                            BlendMode.darken,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          recipes[index].title,
-                          style: const TextStyle(color: Colors.white),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            recipes[index].title,
+                            style: const TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
+                    )
                   );
                 },
               ),
