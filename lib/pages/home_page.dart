@@ -5,7 +5,7 @@ import 'package:mealmate/pages/search_input_page.dart';
 import 'package:mealmate/pages/wine_page.dart'; // นำเข้า WinePage
 import 'package:mealmate/pages/restaurant_page.dart'; // นำเข้า RestaurantPage
 import 'package:mealmate/pages/recipe_detail_page.dart';
-
+import '../api/api_config.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => RecipeDetailPage(recipeId: recipe.id,
-                          apiKey: '6de5a090dd2c4b2795f798d66fc5d774',),
+                          apiKey: spoonacularApiKey,),
                         ),
                       );
                     },

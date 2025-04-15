@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:mealmate/models/search_result_model.dart';
-
+import 'api_config.dart';
 class RecipeApi {
   final dio = Dio();
 
   Future<SearchResultModel> searchRecipes(String query, String cuisine, String type) async {
     var params = {
-      'apiKey': '6de5a090dd2c4b2795f798d66fc5d774',
+      'apiKey': spoonacularApiKey,
       'query': query,
       'number': '100',  // กำหนดจำนวนผลลัพธ์
     };
