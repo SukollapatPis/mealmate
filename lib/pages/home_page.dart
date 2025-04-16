@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mealmate/api/recipe_api.dart';
 import 'package:mealmate/models/recipe_model.dart';
 import 'package:mealmate/pages/search_input_page.dart';
-import 'package:mealmate/pages/wine_page.dart'; // นำเข้า WinePage
-import 'package:mealmate/pages/restaurant_page.dart'; // นำเข้า RestaurantPage
+import 'package:mealmate/pages/wine_page.dart';
+import 'package:mealmate/pages/restaurant_page.dart';
 import 'package:mealmate/pages/recipe_detail_page.dart';
+import 'package:mealmate/pages/favorite_page.dart';
+
 import '../api/api_config.dart';
 class HomePage extends StatefulWidget {
   @override
@@ -98,6 +100,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: colorScheme.primary,
         title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border, color: Color.fromARGB(255, 238, 96, 86)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FavoritePage()),
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mealmate/models/recipe_model.dart';
 import 'package:mealmate/api/recipe_detail_api.dart';
 import 'package:mealmate/pages/nutrient_page.dart';
+import 'package:mealmate/database/favorite_database.dart';
+
 
 class RecipeDetailPage extends StatefulWidget {
   final int recipeId;
@@ -15,11 +17,36 @@ class RecipeDetailPage extends StatefulWidget {
 
 class _RecipeDetailPageState extends State<RecipeDetailPage> {
   late Future<RecipeModel> _recipeFuture;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     _recipeFuture = RecipeDetailApi().fetchRecipeInformation(widget.recipeId, widget.apiKey);
+    _checkFavorite();
+  }
+
+  void _checkFavorite() async {
+  final fav = await FavoriteDatabase.instance.isFavorite(widget.recipeId);
+  setState(() {
+    isFavorite = fav;
+  });
+}
+
+  void _toggleFavorite(RecipeModel recipe) async {
+    if (isFavorite) {
+      await FavoriteDatabase.instance.deleteFavorite(recipe.id);
+    } else {
+      await FavoriteDatabase.instance.insertFavorite({
+        'id': recipe.id,
+        'title': recipe.title,
+        'image': recipe.image,
+      });
+    }
+
+    setState(() {
+      isFavorite = !isFavorite;
+    });
   }
 
   @override
@@ -64,12 +91,18 @@ class _RecipeDetailPageState extends State<RecipeDetailPage> {
                             )
                           : const Icon(Icons.fastfood, size: 80, color: Colors.grey),
                     ),
-                    const Positioned(
+                    Positioned(
                       top: 16,
                       right: 16,
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.favorite_border),
+                        child: IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : Colors.black,
+                          ),
+                          onPressed: () => _toggleFavorite(recipe)
+                        ),
                       ),
                     ),
                     Positioned(
